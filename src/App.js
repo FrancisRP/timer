@@ -26,7 +26,7 @@ export default function App() {
   return (
     <div>
       <p>{studyTime}</p>
-      <button onClick={onReveal}>Answer Revealed</button>
+      <button onClick={onReveal}>Click to Start</button>
     </div>
   );
 }
