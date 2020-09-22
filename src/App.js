@@ -2,34 +2,31 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 export default function App() {
-  let [seconds, setSeconds] = useState(60);
-  const [minute, setMinutes] = useState(0);
-  const [isActive, setIsActive] = useState(false);
+  const [studyTime, setStudyTime] = useState("00:00");
+  const [elapsedTime, setElapsedTime] = useState(0);
 
   useEffect(() => {
-    let interval = null;
-    if (isActive) {
-      interval = setTimeout(() => {
-        setSeconds((seconds) => seconds - 1);
-      }, 1000);
-    } else if (!isActive && seconds !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isActive, seconds]);
+    const studying = setTimeout(() => {
+      setElapsedTime(elapsedTime + 1000);
+    }, 1000);
 
-  if (seconds === 0) {
-    setSeconds((seconds = 60));
-    setMinutes(minute + 1);
+    return () => {
+      clearInterval(studying);
+    };
+  }, [elapsedTime]);
+
+  function onReveal() {
+    const minutes = Math.floor(elapsedTime / 60000);
+    const formatMinutes = minutes.toString().padStart(2, "0");
+    const seconds = Math.floor((elapsedTime / 1000) % 60);
+    const formatSeconds = seconds.toString().padStart(2, "0");
+    setStudyTime(`${formatMinutes}:${formatSeconds}`);
   }
 
-  function toggle() {
-    setIsActive(true);
-  }
   return (
     <div>
-      {minute}:{seconds}
-      <button onClick={toggle}>Click me</button>
+      <p>{studyTime}</p>
+      <button onClick={onReveal}>Answer Revealed</button>
     </div>
   );
 }
